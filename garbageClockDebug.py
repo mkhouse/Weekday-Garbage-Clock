@@ -72,7 +72,7 @@ def parse_time(timestring, is_dst=-1):
                             -1, -1, is_dst)
 
 
-def update_time(timezone=None, demo_num=0):
+def update_time(timezone=None, demo_num=0, demo_hour="7"):
     """ Update system date/time from WorldTimeAPI public server;
         no account required. Pass in time zone string
         (http://worldtimeapi.org/api/timezone for list)
@@ -94,8 +94,11 @@ def update_time(timezone=None, demo_num=0):
     else:
         month = str(random.randint(1,12))
         day = str(random.randint(1,28))
-        hour = str(random.randint(6,20))
-        #hour ="7"
+        if demo_hour:
+            hour = demo_hour
+        else:
+            hour = str(random.randint(6,20))
+            #hour ="7"
         minute = str(random.randint(10,59))
         demoDateTime = '2020-' + month + '-' + day + 'T' + hour + ':' + minute + ':15.813019-08:00'
         # time data JSON example: ['2020-11-28T20:45:15.813019-08:00', False, '-08:00', 6]
@@ -211,7 +214,7 @@ empty_group = displayio.Group()
 # Element 0 is a stand-in item, later replaced with the garbage can bitmap
 # pylint: disable=bare-except
 try:
-    FILENAME = 'moon/splash-' + str(DISPLAY.rotation) + '.bmp'
+    FILENAME = 'bmps/splash-' + str(DISPLAY.rotation) + '.bmp'
     BITMAP = displayio.OnDiskBitmap(open(FILENAME, 'rb'))
     TILE_GRID = displayio.TileGrid(BITMAP, pixel_shader=displayio.ColorConverter(),)
     GROUP.append(TILE_GRID)
@@ -257,6 +260,8 @@ except:
 # pylint: disable=bare-except
 demo_num = 0
 LAST_SYNC = 0
+demo_hour = "7"
+repeatDayCount = 0
 
 # MAIN LOOP ----------------------------------------------------------------
 
@@ -306,16 +311,25 @@ while True:
                 LAST_SYNC += 60 * 5 # 5 minutes
                 continue
     elif DEMO == True:
-        if NOW - LAST_SYNC > 15 or LAST_SYNC == 0:
-            DATETIME, UTC_OFFSET, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE, demo_num)
-            if demo_num < 6:
-                demo_num += 1
-                print("demo_num: ", demo_num)
-            else:
-                demo_num = 0
-                print("demo_num: ", demo_num)
+        if NOW - LAST_SYNC > 10 or LAST_SYNC == 0: #increment every 10 seconds
+            if demo_num == 2 or demo_num == 3: # on Tuesday and Wednesday
+                if repeatDayCount == 0:
+                    demo_hour="7" #set demo hour to 7AM to show first half of the day
+                    repeatDayCount += 1 #will repeat the day
+                elif repeatDayCount == 1:
+                    demo_hour="19" #set demo hour to 7PM to show second half of the day
+                    repeatDayCount = 0 #reset repeatDayCount to 0 to move to next day
+                print("Tue / Wed demo_hour: ", demo_hour)
+            print("repeatDayCount: ", repeatDayCount)
+            DATETIME, UTC_OFFSET, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE, demo_num, demo_hour)
+            if repeatDayCount == 0: # increment the day if it's not repeating
+                if demo_num < 6:
+                    demo_num += 1
+                else:
+                    demo_num = 0
             print("")
             print("TIME REFRESH DEMO TRUE")
+            print("demo_num: ", demo_num)
             print("Weekday: ", WEEKDAY)
             print("")
             LAST_SYNC = time.mktime(DATETIME)
@@ -347,7 +361,7 @@ while True:
     else:
         print("Night Mode Off")
         # Update trash can image (GROUP[0])
-        FILENAME = 'moon/garbage_can_' + COLOR + '.bmp'
+        FILENAME = 'bmps/garbage_can_' + COLOR + '.bmp'
         BITMAP = displayio.OnDiskBitmap(open(FILENAME, 'rb'))
         TILE_GRID = displayio.TileGrid(BITMAP,
                                        pixel_shader=displayio.ColorConverter(),)
