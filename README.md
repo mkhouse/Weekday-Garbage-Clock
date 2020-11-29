@@ -1,5 +1,5 @@
 # Weekday-Garbage-Clock
-##About
+## About
 GARBAGE CLOCK for Adafruit Matrix Portal displays current time, date, day of
 week, garbage alert, and countdown to garbage day.
 Requires WiFi internet access.
@@ -14,7 +14,7 @@ MIT license, all text above must be included in any redistribution.
 
 BDF fonts from the X.Org project.
 
-##Inspiration
+## Inspiration
 This project started with Adabox 016:
 https://learn.adafruit.com/adabox016/introduction
 And the Adafruit Matrix Portal. (Starter kit is available at Adafruit, but may not be in stock.)
@@ -34,7 +34,7 @@ We also can't keep track of the days of the week. With quarantine, and not havin
 regular schedule... who knows what day it is? Having a nice big clock with the day,
 date, and time is something we've been wanting for months.
 
-##Project
+## Project
 I started with the code for the Moon Phase Clock in the Adabox 016 project ideas because
 I liked the matrix layout. More complicated layouts were the part of the Matrix Portal
 code that made the least sense to me, and using this grid gave me a design I liked.
@@ -45,7 +45,7 @@ course removed all of the moony bits.
 
 I also added a demo mode, both to help with testing and to show off my work. :)
 
-##Instructions
+## Instructions
 garbageClock.py has all of the code you need to get started. Follow the instructions
 on the Adafruit site to prep the matrix portal and  install CircuitPython. Then copy the
 code from garbageClock.py to code.py on your board.
@@ -57,7 +57,7 @@ I used for debugging included so you can watch with SCREEN on your terminal app.
 All of the images I used are in the bmps folder, make sure you copy these into a bmps
 folder on your Matrix Portal.
 
-##CircuityPython Libraries:
+## CircuityPython Libraries:
 The CircuitPython Libraries I have installed in /lib on the Matrix Portal are:
 * adafruit_bitmap_font
 * adafruit_bus_device
