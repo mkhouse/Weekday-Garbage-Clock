@@ -52,7 +52,7 @@ code from garbageClock.py to code.py on your board.
 https://learn.adafruit.com/adafruit-matrixportal-m4
 
 garbageClockDebug.py is the same functionality, but with all of the print statements
-I used for debugging included so you can watch with SCREEN on your terminal app.
+I used for debugging included so you can debug with screen on your terminal app.
 
 All of the images I used are in the bmps folder, make sure you copy these into a bmps
 folder on your Matrix Portal.
