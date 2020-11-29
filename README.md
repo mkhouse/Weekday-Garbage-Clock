@@ -77,3 +77,11 @@ The CircuitPython Libraries I have installed in /lib on the Matrix Portal are:
 
 I think a few of these libraries are not needed for this project, but if you plan to
 try other projects with your Matrix Portal it's good to have all of these.
+
+## Ideas for future work
+I'm working on incorporating the buttons on the Matrix Portal to show a scrolling
+message when it's time to take the garbage out that's dismissed with one of the buttons
+on the Matrix Portal.
+
+It would be possible to turn this into a daily chore clock, with different bmp images
+for different tasks and multiple tasks for each day.
