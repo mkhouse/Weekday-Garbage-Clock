@@ -43,7 +43,7 @@ except ImportError:
 
 TWELVE_HOUR = True  # If set, use 12-hour time vs 24-hour (e.g. 3:00 vs 15:00)
 BITPLANES = 6       # Ideally 6, but can set lower if RAM is tight
-DEMO = False        # Enable / Disable demo mode to scroll through each day
+DEMO = True        # Enable / Disable demo mode to scroll through each day
 
 # SOME UTILITY FUNCTIONS AND CLASSES ---------------------------------------
 
@@ -93,7 +93,7 @@ def update_time(timezone=None, demo_num=0, demo_hour="7"):
             hour = demo_hour
         else:
             hour = str(random.randint(6,20))
-            #hour ="7"
+            # hour = str(random.randint(0,23)) # will occasionally show night mode
         minute = str(random.randint(10,59))
         demoDateTime = '2020-' + month + '-' + day + 'T' + hour + ':' + minute + ':15.813019-08:00'
         # time data JSON example: ['2020-11-28T20:45:15.813019-08:00', False, '-08:00', 6]
@@ -255,7 +255,7 @@ except:
 # pylint: disable=bare-except
 demo_num = 0
 LAST_SYNC = 0
-demo_hour = "7"
+demo_hour = str(random.randint(6,20))
 repeatDayCount = 0
 
 # MAIN LOOP ----------------------------------------------------------------
@@ -306,7 +306,8 @@ while True:
                 LAST_SYNC += 60 * 5 # 5 minutes
                 continue
     elif DEMO == True:
-        if NOW - LAST_SYNC > 10 or LAST_SYNC == 0: #increment every 10 seconds
+        # normal demo mode start
+        if NOW - LAST_SYNC > 5 or LAST_SYNC == 0: #increment every 10 seconds
             if demo_num == 2 or demo_num == 3: # on Tuesday and Wednesday
                 if repeatDayCount == 0:
                     demo_hour="7" #set demo hour to 7AM to show first half of the day
@@ -314,14 +315,31 @@ while True:
                 elif repeatDayCount == 1:
                     demo_hour="19" #set demo hour to 7PM to show second half of the day
                     repeatDayCount = 0 #reset repeatDayCount to 0 to move to next day
-                print("Tue / Wed demo_hour: ", demo_hour)
+        # normal demo mode end
+        #
+        # special time demo mode start
+        # uncomment this and comment normal demo move (above)to test night mode
+        # or to test other states requiring specific times
+        # if NOW - LAST_SYNC > 5 or LAST_SYNC == 0: #increment every 10 seconds
+        #     if demo_hour == "7":
+        #         demo_hour = "22"
+        #     elif demo_hour == "22":
+        #         demo_hour = "7"
+        # special time demo mode end
+        # uncomment to here
+        #
+            print("")
+            print("Tue / Wed demo_hour: ", demo_hour)
             print("repeatDayCount: ", repeatDayCount)
+            print("")
             DATETIME, UTC_OFFSET, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE, demo_num, demo_hour)
             if repeatDayCount == 0: # increment the day if it's not repeating
                 if demo_num < 6:
                     demo_num += 1
                 else:
                     demo_num = 0
+            # demo_hour = str(random.randint(6,20)) # will not show night mode
+            demo_hour = str(random.randint(0,23)) # will occasionally show night mode
             print("")
             print("TIME REFRESH DEMO TRUE")
             print("demo_num: ", demo_num)
@@ -330,18 +348,6 @@ while True:
             LAST_SYNC = time.mktime(DATETIME)
             continue # Time may have changed; refresh NOW value
 
-    # Sets the display orientation based on whether the board is horizontal or vertical
-    if DISPLAY.rotation in (0, 180): # Horizontal 'landscape' orientation
-        CENTER_X = 48  # Text along right
-        TRASH_Y = 0     # Garbage at left
-        TIME_Y = 6     # Time at top right
-        EVENT_Y = 26   # Day of week at bottom right
-    else:              # Vertical 'portrait' orientation
-        CENTER_X = 16  # Text down center
-        TIME_Y = 6     # Time/date at top
-        EVENT_Y = 26   # Day of week in middle
-        TRASH_Y = 32    # Garbage at bottom
-
     print()
     print("Datetime: ", DATETIME)
     print("Last Sync: ", LAST_SYNC)
@@ -349,12 +355,24 @@ while True:
     print("NOW - LAST_SYNC: ", NOW - LAST_SYNC)
 
     # Don't draw anything from 10pm to 6am (this thing is BRIGHT)
-    if DATETIME.tm_hour >= 22 or DATETIME.tm_hour < 6:
+    if DATETIME.tm_hour >= 22 or DATETIME.tm_hour <= 6:
         print("Night Mode On")
         DISPLAY.show(empty_group)
     # If it's not night, use normal daytime colors
     else:
         print("Night Mode Off")
+        # Sets the display orientation based on whether the board is horizontal or vertical
+        if DISPLAY.rotation in (0, 180): # Horizontal 'landscape' orientation
+            CENTER_X = 48  # Text along right
+            TRASH_Y = 0     # Garbage at left
+            TIME_Y = 6     # Time at top right
+            EVENT_Y = 26   # Day of week at bottom right
+        else:              # Vertical 'portrait' orientation
+            CENTER_X = 16  # Text down center
+            TIME_Y = 6     # Time/date at top
+            EVENT_Y = 26   # Day of week in middle
+            TRASH_Y = 32    # Garbage at bottom
+        DISPLAY.show(GROUP)
         # Update trash can image (GROUP[0])
         FILENAME = 'bmps/garbage_can_' + COLOR + '.bmp'
         BITMAP = displayio.OnDiskBitmap(open(FILENAME, 'rb'))
