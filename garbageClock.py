@@ -99,7 +99,6 @@ def update_time(timezone=None, demo_num=0, demo_hour="7"):
         # time data JSON example: ['2020-11-28T20:45:15.813019-08:00', False, '-08:00', 6]
         time_data = [demoDateTime, False, '-08:00', demo_num]
 
-    print("time_data: ", time_data)
 
     time_struct = parse_time(time_data[0], time_data[1])
     if time_data[3] == 0: # Sunday
@@ -149,11 +148,6 @@ def update_time(timezone=None, demo_num=0, demo_hour="7"):
         hcolor = 0x33CC33
 
     RTC().datetime = time_struct
-    print("update_time")
-    print("time_struct: ", time_struct)
-    print("utc_offset: ", time_data[2])
-    print("weekday: ", weekday)
-    print("garbage: ", garbage)
     return time_struct, time_data[2], weekday, garbage, color, hcolor
 
 
@@ -269,30 +263,19 @@ while True:
     #button_down.update()
     #button_up.update()
     #if button_up.fell:
-    #    print("button up pressed")
     #--DOES NOT WORK ABOVE--
 
     # Sync with time server every ~5 minutes - the clock drifts if left too long
     if DEMO == False:
         if LAST_SYNC == 0:
-            print("Initialize")
             try:
                 DATETIME, UTC_OFFSET, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE)
             except:
                 DATETIME, UTC_OFFSET, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = time.localtime(), '+00:00', "???", "???", "grey", 0x66666
             LAST_SYNC = time.mktime(DATETIME)
-            print("Datetime: ", DATETIME)
-            print ("Last sync: ", LAST_SYNC)
-            print("Garbage Day: ", GARBAGEDAY)
-            print("Day Color: ", COLOR)
-            print("Datetime hour: ", DATETIME.tm_hour)
         elif NOW - LAST_SYNC > 60*5:
             try:
                 DATETIME, UTC_OFFSET, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE)
-                print("")
-                print("TIME REFRESH DEMO FALSE")
-                print("Weekday: ", WEEKDAY)
-                print("")
                 LAST_SYNC = time.mktime(DATETIME)
                 continue # Time may have changed; refresh NOW value
             except:
@@ -300,9 +283,6 @@ while True:
                 # respond. That's OK, keep running with our current time, and
                 # push sync time ahead to retry in 30 minutes (don't overwhelm
                 # the server with repeated queries).
-                print("")
-                print("TIME REFRESH EXCEPTION")
-                print("")
                 LAST_SYNC += 60 * 5 # 5 minutes
                 continue
     elif DEMO == True:
@@ -314,19 +294,12 @@ while True:
                 elif repeatDayCount == 1:
                     demo_hour="19" #set demo hour to 7PM to show second half of the day
                     repeatDayCount = 0 #reset repeatDayCount to 0 to move to next day
-                print("Tue / Wed demo_hour: ", demo_hour)
-            print("repeatDayCount: ", repeatDayCount)
             DATETIME, UTC_OFFSET, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE, demo_num, demo_hour)
             if repeatDayCount == 0: # increment the day if it's not repeating
                 if demo_num < 6:
                     demo_num += 1
                 else:
                     demo_num = 0
-            print("")
-            print("TIME REFRESH DEMO TRUE")
-            print("demo_num: ", demo_num)
-            print("Weekday: ", WEEKDAY)
-            print("")
             LAST_SYNC = time.mktime(DATETIME)
             continue # Time may have changed; refresh NOW value
 
@@ -342,19 +315,12 @@ while True:
         EVENT_Y = 26   # Day of week in middle
         TRASH_Y = 32    # Garbage at bottom
 
-    print()
-    print("Datetime: ", DATETIME)
-    print("Last Sync: ", LAST_SYNC)
-    print("Now: ", NOW)
-    print("NOW - LAST_SYNC: ", NOW - LAST_SYNC)
 
     # Don't draw anything from 10pm to 6am (this thing is BRIGHT)
     if DATETIME.tm_hour >= 22 or DATETIME.tm_hour < 6:
-        print("Night Mode On")
         DISPLAY.show(empty_group)
     # If it's not night, use normal daytime colors
     else:
-        print("Night Mode Off")
         # Update trash can image (GROUP[0])
         FILENAME = 'bmps/garbage_can_' + COLOR + '.bmp'
         BITMAP = displayio.OnDiskBitmap(open(FILENAME, 'rb'))

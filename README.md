@@ -57,7 +57,9 @@ I used for debugging included so you can debug with screen on your terminal app.
 All of the images I used are in the bmps folder, make sure you copy these into a bmps
 folder on your Matrix Portal.
 
-## CircuityPython Libraries:
+bmp images were made with Asperite, available on Steam.
+
+## CircuitPython Libraries:
 The CircuitPython Libraries I have installed in /lib on the Matrix Portal are:
 * adafruit_bitmap_font
 * adafruit_bus_device
