@@ -283,7 +283,7 @@ while True:
                 # respond. That's OK, keep running with our current time, and
                 # push sync time ahead to retry in 30 minutes (don't overwhelm
                 # the server with repeated queries).
-                LAST_SYNC += 60 * 5 # 5 minutes
+                LAST_SYNC += 60 # 1 minute
                 continue
     elif DEMO == True:
         # normal demo mode start
@@ -316,11 +316,10 @@ while True:
                     demo_num = 0
             # demo_hour = str(random.randint(6,20)) # will not show night mode
             demo_hour = str(random.randint(0,23)) # will occasionally show night mode
-            LAST_SYNC = time.mktime(DATETIME)
             continue # Time may have changed; refresh NOW value
 
     # Don't draw anything from 10pm to 6am (this thing is BRIGHT)
-    if DATETIME.tm_hour >= 22 or DATETIME.tm_hour <= 6:
+        if (DATETIME.tm_hour >= 22 and DATETIME.tm_min >= 0) or (DATETIME.tm_hour <= 6 and DATETIME.tm_min >= 0):
         DISPLAY.show(empty_group)
     # If it's not night, use normal daytime colors
     else:

@@ -43,7 +43,7 @@ except ImportError:
 
 TWELVE_HOUR = True  # If set, use 12-hour time vs 24-hour (e.g. 3:00 vs 15:00)
 BITPLANES = 6       # Ideally 6, but can set lower if RAM is tight
-DEMO = True        # Enable / Disable demo mode to scroll through each day
+DEMO = False        # Enable / Disable demo mode to scroll through each day
 
 # SOME UTILITY FUNCTIONS AND CLASSES ---------------------------------------
 
@@ -286,7 +286,8 @@ while True:
             print("Garbage Day: ", GARBAGEDAY)
             print("Day Color: ", COLOR)
             print("Datetime hour: ", DATETIME.tm_hour)
-        elif NOW - LAST_SYNC > 60*5:
+        # elif NOW - LAST_SYNC > 60*5:
+        elif NOW - LAST_SYNC > 60:
             try:
                 DATETIME, UTC_OFFSET, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE)
                 print("")
@@ -303,7 +304,8 @@ while True:
                 print("")
                 print("TIME REFRESH EXCEPTION")
                 print("")
-                LAST_SYNC += 60 * 5 # 5 minutes
+                # LAST_SYNC += 60 * 5 # 5 minutes
+                LAST_SYNC += 60 # 1 minute
                 continue
     elif DEMO == True:
         # normal demo mode start
@@ -345,7 +347,7 @@ while True:
             print("demo_num: ", demo_num)
             print("Weekday: ", WEEKDAY)
             print("")
-            LAST_SYNC = time.mktime(DATETIME)
+            # LAST_SYNC = time.mktime(DATETIME)
             continue # Time may have changed; refresh NOW value
 
     print()
@@ -355,7 +357,8 @@ while True:
     print("NOW - LAST_SYNC: ", NOW - LAST_SYNC)
 
     # Don't draw anything from 10pm to 6am (this thing is BRIGHT)
-    if DATETIME.tm_hour >= 22 or DATETIME.tm_hour <= 6:
+    # if (DATETIME.tm_hour >= 22 and DATETIME.tm_min >= 0) or (DATETIME.tm_hour <= 6):
+    if (DATETIME.tm_hour >= 22 and DATETIME.tm_min >= 0) or (DATETIME.tm_hour <=5 and DATETIME.tm_min >= 0):
         print("Night Mode On")
         DISPLAY.show(empty_group)
     # If it's not night, use normal daytime colors
