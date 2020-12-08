@@ -316,6 +316,7 @@ while True:
                     demo_num = 0
             # demo_hour = str(random.randint(6,20)) # will not show night mode
             demo_hour = str(random.randint(0,23)) # will occasionally show night mode
+            LAST_SYNC = time.mktime(DATETIME)
             continue # Time may have changed; refresh NOW value
 
     # Don't draw anything from 10pm to 6am (this thing is BRIGHT)

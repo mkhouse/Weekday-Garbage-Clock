@@ -23,6 +23,7 @@ import board
 import busio
 import displayio
 import terminalio
+import sys
 from rtc import RTC
 from adafruit_matrixportal.network import Network
 from adafruit_matrixportal.matrix import Matrix
@@ -82,6 +83,8 @@ def update_time(timezone=None, demo_num=0, demo_hour="7"):
     else: # Use IP geolocation
         time_url = 'http://worldtimeapi.org/api/ip'
 
+    print("")
+    print("Start update_time function NETWORK.fetch_data")
     if DEMO == False:
         time_data = NETWORK.fetch_data(time_url,
                                        json_path=[['datetime'], ['dst'],
@@ -149,11 +152,12 @@ def update_time(timezone=None, demo_num=0, demo_hour="7"):
         hcolor = 0x33CC33
 
     RTC().datetime = time_struct
-    print("update_time")
+    print("update_time complete")
     print("time_struct: ", time_struct)
     print("utc_offset: ", time_data[2])
     print("weekday: ", weekday)
     print("garbage: ", garbage)
+    print("")
     return time_struct, time_data[2], weekday, garbage, color, hcolor
 
 
@@ -275,6 +279,7 @@ while True:
     # Sync with time server every ~5 minutes - the clock drifts if left too long
     if DEMO == False:
         if LAST_SYNC == 0:
+            print("")
             print("Initialize")
             try:
                 DATETIME, UTC_OFFSET, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE)
@@ -296,13 +301,14 @@ while True:
                 print("")
                 LAST_SYNC = time.mktime(DATETIME)
                 continue # Time may have changed; refresh NOW value
-            except:
+            except Exception as e:
                 # update_time() can throw an exception if time server doesn't
                 # respond. That's OK, keep running with our current time, and
                 # push sync time ahead to retry in 30 minutes (don't overwhelm
                 # the server with repeated queries).
                 print("")
                 print("TIME REFRESH EXCEPTION")
+                sys.print_exception(e)
                 print("")
                 # LAST_SYNC += 60 * 5 # 5 minutes
                 LAST_SYNC += 60 # 1 minute
@@ -347,7 +353,7 @@ while True:
             print("demo_num: ", demo_num)
             print("Weekday: ", WEEKDAY)
             print("")
-            # LAST_SYNC = time.mktime(DATETIME)
+            LAST_SYNC = time.mktime(DATETIME)
             continue # Time may have changed; refresh NOW value
 
     print()
