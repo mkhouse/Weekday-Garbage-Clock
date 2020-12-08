@@ -59,6 +59,9 @@ folder on your Matrix Portal.
 
 bmp images were made with Asperite, available on Steam.
 
+## CircuitPython
+Be sure the MatrixPortal is on the most recent version of CircuitPython 6 and the latest versions of libraries. There were issues with some of the libraries which caused an exception on every other network time refresh on an early version, which has been fixed.
+
 ## CircuitPython Libraries:
 The CircuitPython Libraries I have installed in /lib on the Matrix Portal are:
 * adafruit_bitmap_font
