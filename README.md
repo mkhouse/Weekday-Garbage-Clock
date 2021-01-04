@@ -46,12 +46,18 @@ course removed all of the moony bits.
 I also added a demo mode, both to help with testing and to show off my work. :)
 
 ## Instructions
-garbageClock.py has all of the code you need to get started. Follow the instructions
+garbageClockAIO.py has all of the code you need to get started. Follow the instructions
 on the Adafruit site to prep the matrix portal and  install CircuitPython. Then copy the
 code from garbageClock.py to code.py on your board.
 https://learn.adafruit.com/adafruit-matrixportal-m4
 
-garbageClockDebug.py is the same functionality, but with all of the print statements
+Note this new version uses AdafruitIO to get the time (AIO in the filename). The
+old worldtimeapi.org stopped working on 1/1/21, so this has been rewritten to use
+the more reliable AdafruitIO time JSON. You must have an AdafruitIO username and
+key in your secrets.py file for this new version to work. They should be called
+aio_username and aio_key in the secrets.py file.
+
+garbageClockDebugAIO.py is the same functionality, but with all of the print statements
 I used for debugging included so you can debug with screen on your terminal app.
 
 All of the images I used are in the bmps folder, make sure you copy these into a bmps
