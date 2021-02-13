@@ -377,8 +377,8 @@ while True:
         if DISPLAY.rotation in (0, 180): # Horizontal 'landscape' orientation
             CENTER_X = 48  # Text along right
             TRASH_Y = 0     # Garbage at left
-            TIME_Y = 6     # Time at top right
-            EVENT_Y = 26   # Day of week at bottom right
+            TIME_Y = 5     # Time at top right
+            EVENT_Y = 25   # Day of week at bottom right
         else:              # Vertical 'portrait' orientation
             CENTER_X = 16  # Text down center
             TIME_Y = 6     # Time/date at top
