@@ -66,7 +66,7 @@ def update_time(timezone=None, demo_num=0, demo_hour="7"):
         time_url = 'https://io.adafruit.com/api/v2/' + aio_username + '/integrations/time/struct/?x-aio-key=' + aio_key
 
     if DEMO == False:
-        time_data_str = NETWORK.fetch_data(time_url)
+        time_data_str = NETWORK.fetch_data(time_url, timeout=10)
         time_data = json.loads(time_data_str)
 
     else:
@@ -342,7 +342,7 @@ while True:
         GROUP[5].text = GARBAGEDAY
         GROUP[5].color = HCOLOR
         GROUP[5].x = 16 - GROUP[5].bounding_box[2] // 2
-        GROUP[5].y = TRASH_Y + 16
+        GROUP[5].y = TRASH_Y + 15
         for _ in range(1, 5):
             GROUP[_].text = GROUP[5].text
         GROUP[1].x, GROUP[1].y = GROUP[5].x, GROUP[5].y - 1 # Up 1 pixel
