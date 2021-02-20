@@ -261,7 +261,7 @@ while True:
                 DATETIME, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = time.localtime(), "???", "???", "grey", 0x66666
             LAST_SYNC = time.mktime(DATETIME)
         # elif NOW - LAST_SYNC > 60*5:
-        elif NOW - LAST_SYNC > 60:
+        elif NOW - LAST_SYNC > 600:
             try:
                 DATETIME, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE)
                 LAST_SYNC = time.mktime(DATETIME)

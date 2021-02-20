@@ -295,7 +295,7 @@ while True:
             print("Day Color: ", COLOR)
             print("Datetime hour: ", DATETIME.tm_hour)
         # elif NOW - LAST_SYNC > 60*5:
-        elif NOW - LAST_SYNC > 60:
+        elif NOW - LAST_SYNC > 600:
             try:
                 DATETIME, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE)
                 print("")
@@ -368,6 +368,7 @@ while True:
     # Don't draw anything from 10pm to 6am (this thing is BRIGHT)
     # if (DATETIME.tm_hour >= 22 and DATETIME.tm_min >= 0) or (DATETIME.tm_hour <= 6):
     if (DATETIME.tm_hour >= 22 and DATETIME.tm_min >= 0) or (DATETIME.tm_hour <=5 and DATETIME.tm_min >= 0):
+    #if (DATETIME.tm_hour == 14 and DATETIME.tm_min >= 50) or (DATETIME.tm_hour == 15 and DATETIME.tm_min == 0):
         print("Night Mode On")
         DISPLAY.show(empty_group)
     # If it's not night, use normal daytime colors

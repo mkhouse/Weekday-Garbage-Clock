@@ -295,7 +295,7 @@ while True:
             print("Day Color: ", COLOR)
             print("Datetime hour: ", DATETIME.tm_hour)
         # elif NOW - LAST_SYNC > 60*5:
-        elif NOW - LAST_SYNC > 60:
+        elif NOW - LAST_SYNC > 600:
             try:
                 DATETIME, WEEKDAY, GARBAGEDAY, COLOR, HCOLOR = update_time(TIMEZONE)
                 print("")
